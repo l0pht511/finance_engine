@@ -3,7 +3,7 @@
 import numpy as np
 
 from finance_engine.date import bounded_holiday_calendar
-# from finance_engine.date import unbounded_holiday_calendar
+from finance_engine.date import unbounded_holiday_calendar
 
 
 def create_holiday_calendar(
