@@ -25,6 +25,9 @@ from finance_engine.date.periods import weeks
 from finance_engine.date.periods import year
 from finance_engine.date.periods import years
 
+from finance_engine.date.holiday_calendar import HolidayCalendar
+from finance_engine.date.holiday_calendar_factory import create_holiday_calendar
+
 from finance_engine.date.daycounts import actual_360 as daycount_actual_360
 from finance_engine.date.daycounts import actual_365_actual as daycount_actual_365_actual
 from finance_engine.date.daycounts import actual_365_fixed as daycount_actual_365_fixed
