@@ -33,3 +33,5 @@ from finance_engine.date.daycounts import actual_365_actual as daycount_actual_3
 from finance_engine.date.daycounts import actual_365_fixed as daycount_actual_365_fixed
 from finance_engine.date.daycounts import actual_actual_isda as daycount_actual_actual_isda
 from finance_engine.date.daycounts import thirty_360_isda as daycount_thirty_360_isda
+from finance_engine.date.schedules import BusinessDaySchedule
+from finance_engine.date.schedules import PeriodicSchedule

@@ -1,5 +1,8 @@
-from finance_engine.date import constants
 import numpy as np
+
+from finance_engine.date import constants
+from finance_engine.date import tensor_wrapper
+
 
 def day():
     return days(1)
@@ -32,7 +35,7 @@ def years(n):
     return Period(n, constants.PeriodType.YEAR)
 
 
-class Period():
+class Period(tensor_wrapper.TensorWrapper):
     """Represents time periods """
     def __init__(self, quantity, period_type):
 
@@ -65,6 +68,14 @@ class Period():
     @property
     def shape(self):
         return self._quanity.shape
+    
+    @classmethod
+    def _apply_sequence_to_tensor_op(cls, op_fn, tensor_wrappers):
+        q = op_fn([t.quantity() for t in tensor_wrappers])
+        period_type = tensor_wrappers[0].period_type()
+        if not all(t.period_type() == period_type for t in tensor_wrappers[1:]):
+            raise ValueError("Combined PeriodTensors must have the same PeriodType")
+        return Period(q, period_type)
     
     def _apply_op(self, op_fn):
         q = op_fn(self._quanity)

@@ -7,7 +7,7 @@ import numpy as np
 from finance_engine.date import constants
 from finance_engine.date import date_utils
 from finance_engine.date import periods
-
+from finance_engine.date import tensor_wrapper
 
 # Days in each month of a non-leap year.
 _DAYS_IN_MONTHS_NON_LEAP = [
@@ -48,7 +48,7 @@ _DAYS_IN_MONTHS_COMBINED = [0] + _DAYS_IN_MONTHS_NON_LEAP + _DAYS_IN_MONTHS_LEAP
 _ORDINAL_OF_1_1_1970 = 719163
 
 
-class DateFinance():
+class DateFinance(tensor_wrapper.TensorWrapper):
 
     def __init__(self, ordinals, years, months, days):
         self._ordinals = np.array(ordinals, dtype=np.int32)
@@ -296,6 +296,20 @@ class DateFinance():
         output = "DateTensor: shape={}".format(self.shape)
         contents_np = np.stack((self._years, self._months, self._days), axis=-1)
         return output + ", contents={}".format(repr(contents_np))
+    
+    @classmethod
+    def _apply_sequence_to_tensor_op(cls, op_fn, tensor_wrappers):
+        o = op_fn([t.ordinal() for t in tensor_wrappers])
+        y = op_fn([t.year() for t in tensor_wrappers])
+        m = op_fn([t.month() for t in tensor_wrappers])
+        d = op_fn([t.day() for t in tensor_wrappers])
+        return DateFinance(o, y, m, d)
+
+    def _apply_op(self, op_fn):
+        o, y, m, d = (
+            op_fn(t)
+            for t in (self._ordinals, self._years, self._months, self._days))
+        return DateFinance(o, y, m, d)
 
 
 def _num_days_in_month(month, year):
